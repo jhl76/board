@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="g3way.stat.mapper.StatMapper">
+
+<select id="getEmdInfoByPoint" resultType="UmdVo">
+	SELECT 
+    "EMD_CD"      AS emdCd,
+    "SIDO_NM"     AS sidoNm,
+    "SGG_NM"      AS sggNm,
+    "EMD_KOR_NM"  AS emdKorNm,
+    "TOT_NMPR_C"  AS totNmprC,
+    "MALE_NMPR_"  AS maleNmpr,
+    "FEML_NMPR_"  AS femlNmpr,
+    "HH_CNT"      AS hhCnt,
+    "STATS_YM"    AS statsYm
+  FROM board."INCHEON_UMD_POPP_STAT"
+  WHERE ST_Contains(
+    geom,
+    ST_Transform(
+      ST_SetSRID(ST_MakePoint(#{lng}, #{lat}), 4326),
+      5186
+    )
+  )
+  LIMIT 1
+</select>
+
+
+<select id="sidoList" resultType="SidoVo">
+	SELECT
+	    "SIDO_NM"                                   AS sidoNm,
+	    "SGG_CNT"                                   AS sggCnt,
+	    "UMD_CNT"                                   AS umdCnt,
+	    "LI_TONG_CN"                                AS liTongCn,
+	    "TOT_NMPR_C"                                AS totNmprC,
+	    "HH_CNT"                                    AS hhCnt,
+	    "HH_NMPR"                                   AS hhNmpr,
+	    "MALE_NMPR_"                                AS maleNmpr,
+	    "FEML_NMPR_"                                AS femlNmpr,
+	    "MALE_FEML_"                                AS maleFeml,
+	    "LSMT_NMPR_"                                AS lsmtNmpr,
+	    "TOT_NMPR_L"                                AS totNmprL,
+	    "STATS_YM"                                  AS statsYm,
+	    "BJUMD_CNT"                                 AS bjumdCnt,
+	    "BJLI_CNT"                                  AS bjliCnt
+	FROM board."INCHEON_SIDO_POPP_STAT"
+</select>
+	
+</mapper>

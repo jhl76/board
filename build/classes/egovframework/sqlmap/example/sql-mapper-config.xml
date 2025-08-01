@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <typeAliases>
+		<typeAlias alias="BoardVo" type="g3way.board.vo.BoardVo"/>
+		<typeAlias alias="UserVo" type="g3way.board.vo.UserVo"/>
+		<typeAlias alias="CmntVo" type="g3way.board.vo.CmntVo"/>
+		<typeAlias alias="UmdVo" type="g3way.stat.vo.UmdVo"/>
+		<typeAlias alias="SidoVo" type="g3way.stat.vo.SidoVo"/>
+    </typeAliases>
+</configuration>

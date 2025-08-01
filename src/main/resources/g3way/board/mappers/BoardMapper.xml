@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="g3way.board.mapper.BoardMapper">
+
+<sql id="selectBoardColumns">
+	bbs_sn AS bbsSn
+	, bbs_ttl AS bbsTtl
+	, bbs_cn AS bbsCn
+	, bbs_inq_cnt  AS bbsInqCnt
+	, rmrk_cn AS rmrkCn
+	, use_yn AS useYn
+	, wrt_dt AS wrtDt
+	, cntn_ip_addr AS cntnIpAddr 
+	, updt_dt AS updtDt
+	, user_id AS userId
+	, file_nm AS fileNm 
+	, orgnl_file_nm AS orgnlFileNm
+</sql>
+
+<sql id="selectCmntColumns">
+	cmnt_no AS cmntNo
+	, bbs_sn AS bbsSn
+	, user_id AS userId
+	, cmnt_cn AS cmntCn
+	, wrt_dt AS wrtDt
+	, updt_dt AS updtDt
+	, up_cmnt_no AS upCmntNo
+</sql>
+
+<select id="boardCount" resultType="Integer">
+	select count(*) as count 
+	from board.bbs_t
+	where use_yn = 'Y'
+</select>
+
+<!-- <select id="boardList" resultType="BoardVo" parameterType="Integer">
+	select 		
+				<include refid="selectBoardColumns"></include>
+				, rownum as rownum
+	from
+	(
+	select
+		ROW_NUMBER() OVER(order by board.bbs_sn desc) AS rownum,
+		board.*
+	from
+		board.bbs_t board
+	where 
+		board.use_yn = 'Y'
+	) as c
+	where 
+		c.rownum between #{pageStart} and #{pageLimit}
+	order by c.rownum asc
+</select> -->
+
+<select id="boardList" resultType="BoardVo">
+		SELECT 
+		board.bbs_sn AS bbsSn,
+		board.bbs_ttl AS bbsTtl,
+		board.bbs_cn AS bbsCn,
+		board.bbs_inq_cnt AS bbsInqCnt,
+		board.rmrk_cn AS rmrkCn,
+		board.use_yn AS useYn,
+		board.wrt_dt AS wrtDt,
+		board.cntn_ip_addr AS cntnIpAddr,
+		board.updt_dt AS updtDt,
+		board.user_id AS userId,
+		board.file_nm AS fileNm,
+		board.orgnl_file_nm AS orgnlFileNm,
+		COUNT(cmnt.cmnt_no) AS cmntCount,
+		<choose>
+			<when test="filter == 'fast'">
+				row_number () over(order by board.bbs_sn DESC) as rowNum	
+			</when>
+			<when test="filter == 'last'">
+				row_number () over(order by board.bbs_sn ASC) as rowNum
+			</when>
+			<when test="filter == 'popular'">
+				row_number () over(order by board.bbs_inq_cnt DESC) as rowNum
+			</when>
+		</choose>
+		FROM board.bbs_t board
+		LEFT JOIN board.cmnt_t cmnt ON board.bbs_sn = cmnt.bbs_sn
+		WHERE board.use_yn = 'Y'
+		GROUP BY 
+		board.bbs_sn, board.bbs_ttl, board.bbs_cn, board.bbs_inq_cnt, board.rmrk_cn,
+		board.use_yn, board.wrt_dt, board.cntn_ip_addr, board.updt_dt, board.user_id,
+		board.file_nm, board.orgnl_file_nm
+		<choose>
+			<when test="filter == 'fast'">
+			ORDER BY board.bbs_sn DESC
+			</when>
+			<when test="filter == 'last'">
+			ORDER BY board.bbs_sn ASC
+			</when>
+			<when test="filter == 'popular'">
+			ORDER BY board.bbs_inq_cnt DESC
+			</when>
+		</choose>
+		LIMIT #{pageLimit} OFFSET #{pageStart} - 1
+</select>
+
+<select id="searchBoardCount" resultType="Integer">
+	SELECT COUNT(*) 
+	FROM board.bbs_t 
+	WHERE use_yn = 'Y'
+	<choose>
+	    <when test="searchBy == 'bbsTtl' ">
+	        AND bbs_ttl LIKE CONCAT('%', #{searchCn}, '%')
+	    </when>
+	    <when test="searchBy == 'userId' ">
+	        AND user_id LIKE CONCAT('%', #{searchCn}, '%')
+	    </when>
+	    <otherwise>
+				and (
+							bbs_ttl LIKE CONCAT('%', #{searchCn}, '%')
+							OR user_id LIKE CONCAT('%', #{searchCn}, '%')
+						 )
+		</otherwise>
+	</choose>
+</select>
+
+<select id="searchBoardList" resultType="BoardVo">
+    	SELECT 
+		board.bbs_sn AS bbsSn,
+		board.bbs_ttl AS bbsTtl,
+		board.bbs_cn AS bbsCn,
+		board.bbs_inq_cnt AS bbsInqCnt,
+		board.rmrk_cn AS rmrkCn,
+		board.use_yn AS useYn,
+		board.wrt_dt AS wrtDt,
+		board.cntn_ip_addr AS cntnIpAddr,
+		board.updt_dt AS updtDt,
+		board.user_id AS userId,
+		board.file_nm AS fileNm,
+		board.orgnl_file_nm AS orgnlFileNm,
+		COUNT(cmnt.cmnt_no) AS cmntCount,
+        <choose>
+			<when test="filter == 'fast'">
+				row_number () over(order by board.bbs_sn DESC) as rowNum	
+			</when>
+			<when test="filter == 'last'">
+				row_number () over(order by board.bbs_sn ASC) as rowNum
+			</when>
+			<when test="filter == 'popular'">
+				row_number () over(order by board.bbs_inq_cnt DESC) as rowNum
+			</when>
+	    </choose>
+    	FROM board.bbs_t board
+		LEFT JOIN board.cmnt_t cmnt ON board.bbs_sn = cmnt.bbs_sn
+		WHERE board.use_yn = 'Y'
+		<choose>
+			<when test="searchBy == 'bbsTtl'">
+			    and board.bbs_ttl LIKE '%' || #{searchCn} || '%'
+			</when>
+			<when test="searchBy == 'userId'">
+			    and board.user_id LIKE '%' || #{searchCn} || '%'
+			</when>
+			<otherwise>
+			    and 
+			    (
+			        board.bbs_ttl LIKE '%' || #{searchCn} || '%'
+			        OR board.user_id LIKE '%' || #{searchCn} || '%'
+			    )
+			</otherwise>
+		</choose>
+		GROUP BY 
+		board.bbs_sn, board.bbs_ttl, board.bbs_cn, board.bbs_inq_cnt, board.rmrk_cn,
+		board.use_yn, board.wrt_dt, board.cntn_ip_addr, board.updt_dt, board.user_id,
+		board.file_nm, board.orgnl_file_nm
+	    <choose>
+		  	<when test="filter == 'fast'">
+			 	ORDER BY board.bbs_sn DESC
+		  	</when>
+		  	<when test="filter == 'last'">
+			 	ORDER BY board.bbs_sn ASC
+		  	</when>
+		  	<when test="filter == 'popular'">
+			 	ORDER BY board.bbs_inq_cnt DESC
+		  	</when>
+	  </choose>
+    LIMIT #{pageLimit} OFFSET #{pageStart} - 1
+</select>
+
+<select id="getBoardInfo" resultType="BoardVo">
+	select 		
+				<include refid="selectBoardColumns"></include>
+	from board.bbs_t
+	where bbs_sn = #{bbsSn}
+</select>
+
+<select id="getCommentInfo" resultType="CmntVo" parameterType="String"> 
+	select 		
+				<include refid="selectCmntColumns"></include>
+	from board.cmnt_t
+	where cmnt_no = #{cmntNo}
+</select>
+ 
+<select id="commentList" resultType="CmntVo">
+	select 
+				<include refid="selectCmntColumns"></include>
+	from board.cmnt_t
+	where bbs_sn = #{bbsSn} 
+	order by 
+					case when up_cmnt_no is null then cmnt_no else up_cmnt_no end
+					,wrt_dt ASC, updt_dt ASC
+</select>
+
+<insert id="insertComment" parameterType="CmntVo">
+	insert into board.cmnt_t(bbs_sn, user_id, cmnt_cn)
+	values(cast(#{bbsSn} as INTEGER), #{userId}, #{cmntCn})
+</insert> 
+
+<delete id="deleteComment" parameterType="String"> 
+	delete
+	from board.cmnt_t
+	where cmnt_no = #{cmntNo}
+	or up_cmnt_no = #{cmntNo}
+</delete>
+
+<update id="updateComment" parameterType="String">
+	update board.cmnt_t
+	set cmnt_cn = #{cmntCn}, updt_dt = to_char(now(), 'YYYY-MM-DD HH24:MI:SS') 
+	where cmnt_no = #{cmntNo}
+</update>
+
+<insert id="insertUpCmnt" parameterType="CmntVo">
+	insert into board.cmnt_t(bbs_sn, user_id, cmnt_cn, up_cmnt_no)
+	values(cast(#{bbsSn} as INTEGER), #{userId}, #{cmntCn}, #{cmntNo})
+</insert>
+
+<update id="updateBbsInqCnt" parameterType="Integer">
+	update board.bbs_t
+	set bbs_inq_cnt = (select bbs_inq_cnt from board.bbs_t where bbs_sn = #{bbsSn}) + 1
+	where bbs_sn = #{bbsSn} 
+</update>
+
+<update id="deleteBoard">
+	update board.bbs_t
+	set use_yn = 'N'
+	where bbs_sn = #{bbsSn}
+</update>
+
+<update id="updateBoard" parameterType="BoardVo">
+	update board.bbs_t
+	set bbs_ttl = #{bbsTtl}, bbs_cn = #{bbsCn}, rmrk_cn = #{rmrkCn}, updt_dt = TO_CHAR(now(), 'YYYY-MM-DD HH24:MI:SS'),
+	file_nm = #{fileNm}, orgnl_file_nm = #{orgnlFileNm}
+	where bbs_sn = CAST(#{bbsSn} AS INTEGER)
+</update>
+
+<insert id="insertBoard" parameterType="BoardVo">
+	INSERT INTO board.bbs_t (bbs_ttl, bbs_cn, rmrk_cn, user_id, file_nm, orgnl_file_nm) 
+    VALUES (#{bbsTtl}, #{bbsCn}, #{rmrkCn}, #{userId}, #{fileNm}, #{orgnlFileNm} )
+</insert>
+
+<select id="selectUser" resultType="UserVo">
+	select 
+				  user_id as userId
+				, user_pw as userPw
+				, authrt_cd as authrtCd
+	from board.user_t
+	where user_id = #{userId}
+	and authrt_cd = #{authrtCd}
+</select>
+
+<update id="updateFileToNull" parameterType="Integer">
+	update board.bbs_t
+	set file_nm = null, orgnl_file_nm = null
+	where bbs_sn = #{bbsSn}
+</update>
+
+</mapper>
