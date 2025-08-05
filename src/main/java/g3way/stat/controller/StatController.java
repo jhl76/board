@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import g3way.stat.service.StatService;
+import g3way.stat.vo.GunguVo;
 import g3way.stat.vo.SidoVo;
 import g3way.stat.vo.UmdVo;
 
@@ -55,7 +57,11 @@ public class StatController {
 	}
 	
 	@RequestMapping("/gisOlHome.do")
-	public String gisOlHome() throws Exception{
+	public String gisOlHome(Model model) throws Exception{
+		SidoVo sido = statService.sidoList();
+		List<GunguVo> gungu = statService.gunguList();
+		model.addAttribute("sido", sido);
+		model.addAttribute("gungu", gungu);
 		return "gisOlHome";
 	}
 	

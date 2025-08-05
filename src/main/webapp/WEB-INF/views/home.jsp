@@ -210,9 +210,9 @@ a:hover{
 					</c:if>
 					<div class="text-end mt-3">
 						<select class="form-select me-2" id="pageLimit" name="pageLimit">
-							<option value="10" ${pageLimit == 10 ? 'selected' : ''}>10개씩 보기</option>
-							<option value="30" ${pageLimit == 30 ? 'selected' : ''}>30개씩 보기</option>
-							<option value="50" ${pageLimit == 50 ? 'selected' : ''}>50개씩 보기</option>
+							<option value="9" ${pageLimit == 9 ? 'selected' : ''}>9개씩 보기</option>
+							<option value="18" ${pageLimit == 18 ? 'selected' : ''}>18개씩 보기</option>
+							<option value="36" ${pageLimit == 36 ? 'selected' : ''}>36개씩 보기</option>
 						</select>
 					</div>
 				</nav>
@@ -267,6 +267,7 @@ a:hover{
 		            	</c:when>
 		    </c:choose>
 		    
+		    <br>
 			<nav aria-label="Page navigation">
 				<ul class="pagination justify-content-center">
 				<c:choose>

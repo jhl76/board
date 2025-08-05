@@ -1,11 +1,14 @@
 package g3way.stat.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import g3way.stat.mapper.StatMapper;
 import g3way.stat.service.StatService;
+import g3way.stat.vo.GunguVo;
 import g3way.stat.vo.SidoVo;
 import g3way.stat.vo.UmdVo;
 
@@ -23,5 +26,10 @@ public class StatServiceImpl extends EgovAbstractServiceImpl implements StatServ
 	@Override
 	public SidoVo sidoList() throws Exception {
 		return statMapper.sidoList();
+	}
+	
+	@Override
+	public List<GunguVo> gunguList() throws Exception {
+		return statMapper.gunguList();
 	}
 }

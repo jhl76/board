@@ -76,7 +76,7 @@ public class BoardController {
 										, @RequestParam(value = "page" , required = false, defaultValue = "1") int page
 										, @RequestParam(value = "searchBy", required = false) String searchBy
 										, @RequestParam(value = "searchCn", required = false) String searchCn
-										, @RequestParam(value = "pageLimit", required = false, defaultValue = "10") int pageLimit
+										, @RequestParam(value = "pageLimit", required = false, defaultValue = "9") int pageLimit
 										, @RequestParam(value = "filter", required = false, defaultValue = "fast") String filter) throws Exception
 	{
 		System.out.println("searchBy : " + searchBy);

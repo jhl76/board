@@ -256,7 +256,7 @@
 	  document.getElementById('legendImg').src = legendUrl;
 	}  
 	
-	// 초기 로드: SGG
+	// 초기 로드: umd
 	loadLayer('umd');
 	
 	// 셀렉트 변경 시 레이어 교체

@@ -8,5 +8,6 @@
 		<typeAlias alias="CmntVo" type="g3way.board.vo.CmntVo"/>
 		<typeAlias alias="UmdVo" type="g3way.stat.vo.UmdVo"/>
 		<typeAlias alias="SidoVo" type="g3way.stat.vo.SidoVo"/>
+		<typeAlias alias="GunguVo" type="g3way.stat.vo.GunguVo"/>
     </typeAliases>
 </configuration>
