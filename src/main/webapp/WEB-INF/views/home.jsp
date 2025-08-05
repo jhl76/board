@@ -46,7 +46,7 @@ a:hover{
 }
 
 .slide-img {
-	width: 200px;
+	width: 50px;
 	height: auto;
 	margin: 0 20px;
 	flex-shrink: 0;
@@ -344,7 +344,7 @@ a:hover{
 			<div class="slider-container">
 				<div class="slider-track">
 					<img src="images/html.png" class="slide-img">
-					<img src="images/css-3.png" class="slide-img">
+					<img src="images/css.png" class="slide-img">
 					<img src="images/js.png" class="slide-img">
 					<img src="images/java.png" class="slide-img">
 					<img src="images/spring.png" class="slide-img">
@@ -352,11 +352,52 @@ a:hover{
 					
 					<!-- 반복 이미지로 이어붙이기 (무한 루프 효과) -->
 					<img src="images/html.png" class="slide-img">
-					<img src="images/css-3.png" class="slide-img">
+					<img src="images/css.png" class="slide-img">
 					<img src="images/js.png" class="slide-img">
 					<img src="images/java.png" class="slide-img">
 					<img src="images/spring.png" class="slide-img">
 					<img src="images/postgre.png" class="slide-img">
+					
+					<!-- 반복 이미지로 이어붙이기 (무한 루프 효과) -->
+					<img src="images/html.png" class="slide-img">
+					<img src="images/css.png" class="slide-img">
+					<img src="images/js.png" class="slide-img">
+					<img src="images/java.png" class="slide-img">
+					<img src="images/spring.png" class="slide-img">
+					<img src="images/postgre.png" class="slide-img">
+					
+					<!-- 반복 이미지로 이어붙이기 (무한 루프 효과) -->
+					<img src="images/html.png" class="slide-img">
+					<img src="images/css.png" class="slide-img">
+					<img src="images/js.png" class="slide-img">
+					<img src="images/java.png" class="slide-img">
+					<img src="images/spring.png" class="slide-img">
+					<img src="images/postgre.png" class="slide-img">
+					
+					<!-- 반복 이미지로 이어붙이기 (무한 루프 효과) -->
+					<img src="images/html.png" class="slide-img">
+					<img src="images/css.png" class="slide-img">
+					<img src="images/js.png" class="slide-img">
+					<img src="images/java.png" class="slide-img">
+					<img src="images/spring.png" class="slide-img">
+					<img src="images/postgre.png" class="slide-img">
+					
+					<!-- 반복 이미지로 이어붙이기 (무한 루프 효과) -->
+					<img src="images/html.png" class="slide-img">
+					<img src="images/css.png" class="slide-img">
+					<img src="images/js.png" class="slide-img">
+					<img src="images/java.png" class="slide-img">
+					<img src="images/spring.png" class="slide-img">
+					<img src="images/postgre.png" class="slide-img">
+					
+					<!-- 반복 이미지로 이어붙이기 (무한 루프 효과) -->
+					<img src="images/html.png" class="slide-img">
+					<img src="images/css.png" class="slide-img">
+					<img src="images/js.png" class="slide-img">
+					<img src="images/java.png" class="slide-img">
+					<img src="images/spring.png" class="slide-img">
+					<img src="images/postgre.png" class="slide-img">
+					
 				</div>
 			</div>
 		</div>
