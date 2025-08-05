@@ -57,13 +57,19 @@
 
 <div class="container">
   <br><br><h3>QGIS - GeoServer EPSG:5186 (OpenLayers)</h3>
-  <div id="targetDiv"></div><br>
+  <div id="targetDiv"></div><br><br>
   
+  <div class="form-control">
   <div class="chart-container ">
     <h3 class="text-center">📊 군구별 총 인구 비율</h3><br>
     <canvas id="sggPieChart" width="600" height="600"></canvas>
   </div>
+  </div>
   
+  <br><br>
+  
+  <div class="form-control">
+  <h3 class="text-left">📊 인천광역시 인구 통계</h3>
   <div class="row g-3 align-items-stretch mb-3">
 	  <div class="col-6 col-md-3">
 	    <div class="card h-100 shadow-sm">
@@ -161,8 +167,9 @@
 	    </div>
 	  </div>
 	</div>
+  </div>
 
-	<br>
+  <br>
 
   <div class="mb-2 d-flex align-items-center gap-2">
     <label for="layerSelect" class="form-label mb-0">레이어 선택</label>
