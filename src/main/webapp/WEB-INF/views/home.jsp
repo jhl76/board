@@ -119,6 +119,21 @@ a:hover{
 	          📌 <span class="ms-2">한국부동산원 OPEN API</span>
 	        </a>
 	      </li>
+	      <li class="nav-item mb-2">
+	        <a class="nav-link d-flex align-items-center menu-link" href="dogHome.do">
+			  🐶 <span class="ms-2">강아지 사진보기</span>
+			</a>
+	      </li>
+	      <li class="nav-item mb-2">
+	        <a class="nav-link d-flex align-items-center menu-link" href="kanye.do">
+			  🎤 <span class="ms-2">Kanye West 명언 게시판</span>
+			</a>
+	      </li>
+	      <li class="nav-item mb-2">
+	        <a class="nav-link d-flex align-items-center menu-link" href="poke.do">
+			  🎮 <span class="ms-2">포켓몬 도감</span>
+			</a>
+	      </li>
 	      <li class="nav-item mt-4 text-center">
 	        <button id="logoutBtn" type="button" class="btn btn-outline-danger btn-sm w-100">
 	          🚪 로그아웃
