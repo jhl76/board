@@ -13,7 +13,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@7.5.2/ol.css">
 <script src="https://cdn.jsdelivr.net/npm/ol@7.5.2/dist/ol.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-piechart-outlabels"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
 <style>
@@ -51,6 +50,44 @@
       width: 600px;
       margin: 0 auto;
     }
+    .layer-tree {
+  width: 100%;
+  max-width: 320px;
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:10px;
+  box-shadow:0 1px 3px rgba(0,0,0,.06);
+  padding:10px 12px;
+}
+.layer-tree__title{
+  font-weight:800; color:#374151; margin-bottom:8px;
+}
+.layer-tree details{ margin: 4px 0; }
+.layer-tree summary{
+  cursor:pointer; list-style:none; padding:6px 8px; border-radius:8px;
+  font-weight:700; color:#334155;
+}
+.layer-tree summary::-webkit-details-marker{ display:none; }
+.layer-tree summary:before{
+  content:"▸"; display:inline-block; margin-right:6px; transition: transform .2s;
+}
+.layer-tree details[open] > summary:before{ transform: rotate(90deg); }
+
+.layer-tree ul{ margin:4px 0 6px 10px; padding-left:14px; border-left:1px dashed #d1d5db; }
+.layer-tree li{ list-style:none; padding:6px 0 6px 8px; position:relative; }
+.layer-tree li::before{
+  content:""; position:absolute; left:-14px; top:18px; width:14px; height:1px; background:#d1d5db;
+}
+.layer-tree label{
+  display:flex; align-items:center; gap:8px;
+  font-size:.95rem; color:#374151; cursor:pointer;
+}
+.layer-tree input[type="radio"]{ accent-color:#2563eb; }
+
+.visually-hidden{
+  position:absolute !important; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); border:0;
+}
 </style>
 </head>
 <body>
@@ -65,7 +102,6 @@
     <canvas id="sggPieChart" width="600" height="600"></canvas>
   </div>
   </div>
-  
   <br><br>
   
   <div class="form-control">
@@ -167,17 +203,144 @@
 	    </div>
 	  </div>
 	</div>
+	
+	<br>
+	<h3 class="text-left">📊 <span id="sggTitle" class="text-danger"></span> 인구 통계</h3>
+
+	<div class="row g-3 align-items-stretch mb-3" id="sggCards">
+	  <div class="col-6 col-md-3">
+	    <div class="card h-100 shadow-sm">
+	      <div class="card-body d-flex align-items-center">
+	        <img src="images/1.png" class="me-3 rounded-circle border" style="width:50px;height:50px;object-fit:cover;" />
+	        <div>
+	          <div class="small text-muted fw-bold">기준 총인구수</div>
+	          <div class="h4 fw-bold mb-0" id="sggSumTotal">-</div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	
+	  <!-- 전월인구 -->
+	  <div class="col-6 col-md-3">
+	    <div class="card h-100 shadow-sm">
+	      <div class="card-body d-flex align-items-center">
+	        <img src="images/2.png" class="me-3 rounded-circle border" style="width:50px;height:50px;object-fit:cover;" />
+	        <div>
+	          <div class="small text-muted fw-bold">전월인구수</div>
+	          <div class="h4 fw-bold mb-0" id="sggLsmtNmpr">-</div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	
+	  <!-- 전월대비 -->
+	  <div class="col-6 col-md-3">
+	    <div class="card h-100 shadow-sm">
+	      <div class="card-body d-flex align-items-center">
+	        <img src="images/3.png" class="me-3 rounded-circle border" style="width:50px;height:50px;object-fit:cover;" />
+	        <div>
+	          <div class="small text-muted fw-bold">전월대비</div>
+	          <div class="h4 fw-bold mb-0" id="sggTotNmprL">-</div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	
+	  <!-- 남녀비율 -->
+	  <div class="col-6 col-md-3">
+	    <div class="card h-100 shadow-sm">
+	      <div class="card-body d-flex align-items-center">
+	        <img src="images/4.png" class="me-3 rounded-circle border" style="width:50px;height:50px;object-fit:cover;" />
+	        <div>
+	          <div class="small text-muted fw-bold">남녀비율</div>
+	          <div class="h4 fw-bold mb-0" id="sggMaleFeml">-</div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	
+	  <!-- 남성/여성/세대/세대당 -->
+	  <div class="col-6 col-md-3"><div class="card h-100 shadow-sm"><div class="card-body d-flex align-items-center">
+	    <img src="images/5.png" class="me-3 rounded-circle border" style="width:50px;height:50px;object-fit:cover;" />
+	    <div><div class="small text-muted fw-bold">남성인구수</div><div class="h4 fw-bold mb-0" id="sggMaleNmprCnt">-</div></div>
+	  </div></div></div>
+	
+	  <div class="col-6 col-md-3"><div class="card h-100 shadow-sm"><div class="card-body d-flex align-items-center">
+	    <img src="images/6.png" class="me-3 rounded-circle border" style="width:50px;height:50px;object-fit:cover;" />
+	    <div><div class="small text-muted fw-bold">여성인구수</div><div class="h4 fw-bold mb-0" id="sggFemlNmprCnt">-</div></div>
+	  </div></div></div>
+	
+	  <div class="col-6 col-md-3"><div class="card h-100 shadow-sm"><div class="card-body d-flex align-items-center">
+	    <img src="images/7.png" class="me-3 rounded-circle border" style="width:50px;height:50px;object-fit:cover;" />
+	    <div><div class="small text-muted fw-bold">세대 수</div><div class="h4 fw-bold mb-0" id="sggHhCnt">-</div></div>
+	  </div></div></div>
+	
+	  <div class="col-6 col-md-3"><div class="card h-100 shadow-sm"><div class="card-body d-flex align-items-center">
+	    <img src="images/8.png" class="me-3 rounded-circle border" style="width:50px;height:50px;object-fit:cover;" />
+	    <div><div class="small text-muted fw-bold">세대당 인구</div><div class="h4 fw-bold mb-0" id="sggHhNmpr">-</div></div>
+	  </div></div></div>
+	</div>
+	
+	<div id="sggStatsError" class="text-danger d-none small mt-2"></div>
+	  
   </div>
 
   <br>
 
-  <div class="mb-2 d-flex align-items-center gap-2">
-    <label for="layerSelect" class="form-label mb-0">레이어 선택</label>
-    <select id="layerSelect" class="form-select form-select-sm w-auto">
-      <option value="umd" selected>읍면동 인구 (UMD)</option>
-      <option value="sgg">시군구 인구 (SGG)</option>
-    </select>
-  </div>
+    <!-- 트리형 레이어 선택 -->
+	<div class="layer-tree mb-2">
+	  <div class="layer-tree__title">레이어 선택</div>
+	
+	<details open>
+	  <summary>인구 통계</summary>
+	  <ul>
+	    <li>
+	      <details>
+	        <summary>시/군/구 (SGG)</summary>
+	        <ul>
+	          <li>
+	            <label>
+	              <input type="radio" name="layerTree" value="sgg" checked> 전체
+	            </label>
+	          </li>
+	          <ul>
+	          <c:forEach var="sgg" items="${sggList}">
+	            <li>
+	              <label>
+	                <input type="radio" name="layerTree" value="sgg_${sgg.sggNm}">
+	                ${sgg.sggNm}
+	              </label>
+	            </li>
+	          </c:forEach>
+	          </ul>
+	        </ul>
+	      </details>
+	    </li>
+	    <li>
+	      <details id="umdGroup">
+	        <summary>읍/면/동 (UMD)</summary>
+	        <ul>
+	          <li>
+	            <label>
+	              <input type="radio" name="layerTree" value="umd"> 전체
+	            </label>
+	          </li>
+	          <!-- 읍면동 상세 목록은 필요 시 여기에 추가 -->
+	          <span id="umdLoading" class="text-muted small" style="display:none; padding-left:8px;">불러오는 중…</span>
+         	  <ul id="umdItems"></ul>
+	        </ul>
+	      </details>
+	    </li>
+	  </ul>
+	</details>
+
+	
+	  <!-- 기존 JS 호환용: 숨겨둔 select (값은 그대로 유지) -->
+	  <select id="layerSelect" class="visually-hidden">
+	    <option value="umd" selected>읍면동 인구 (UMD)</option>
+	    <option value="sgg">시군구 인구 (SGG)</option>
+	  </select>
+	</div>
 
   <div id="map">
     <div class="legend-toggle">
@@ -293,12 +456,12 @@
 	}
 	
 	// 초기 로드: umd
-	loadLayer('umd');
+	loadLayer('sgg');
 	
 	// 셀렉트 변경 시 레이어 교체
 	$('#layerSelect').on('change', function () {
 	  loadLayer($(this).val());
-	});
+	}); 
 	
 	// 범례 토글
 	$('#toggleLegend').on('click', function () {
@@ -310,6 +473,114 @@
 	$('#homeBtn').on('click', function () {
 	  window.location.href = 'home.do';
 	});
+	
+    function fmt(n){ if(n==null || n==='') return '-'; return Number(n).toLocaleString(); }
+
+    function renderSggStats(s) {
+      // 타이틀
+      if (s.sggNm) $('#sggTitle').text(s.sggNm);
+      // 카드 값
+      $('#sggSumTotal').text(fmt(s.totNmprC));
+      $('#sggLsmtNmpr').text(fmt(s.lsmtNmpr));
+      $('#sggTotNmprL').text(s.totNmprL ?? '-');     // 비율/증감률이면 그대로
+      $('#sggMaleFeml').text(s.maleFeml ?? '-');      // 남/녀 비율 표기
+      $('#sggMaleNmprCnt').text(fmt(s.maleNmpr));
+      $('#sggFemlNmprCnt').text(fmt(s.femlNmpr));
+      $('#sggHhCnt').text(fmt(s.hhCnt));
+      $('#sggHhNmpr').text(s.hhNmpr ?? '-');
+    }
+	
+	$(document).on('change', 'input[name="layerTree"]', function () {
+		  const v = this.value;
+
+		  // UMD 전체
+		  if (v == 'umd') {
+		    $('#layerSelect').val('umd').trigger('change');
+		    return;
+		  }
+	
+		  // 특정 UMD
+		  if (v.indexOf('umd_') == 0) {
+			const sggNm = v.substring(4);
+		  }
+
+		  // SGG 전체
+		  if (v == 'sgg') {
+		    $('#layerSelect').val('sgg').trigger('change');
+		    $('#umdItems').empty();
+		    return;
+		  }
+
+		  // 특정 SGG (예: sgg_연수구)
+		  if (v.indexOf('sgg_') === 0) {
+		    const sggNm = v.substring(4);
+		    $('#layerSelect').val('sgg').trigger('change');
+
+		    $('#umdLoading').show();
+		    $('#umdItems').empty();
+
+		    $.ajax({
+		      url: 'getUmdListBySgg.do',
+		      type: 'GET',
+		      dataType: 'json',
+		      data: { sggNm: sggNm },
+		      success: function (data) {
+		        const rm = data && data.resultMap ? data.resultMap : {};
+		        if (rm.status !== 'success' || !Array.isArray(rm.getUmdListBySgg)) {
+		          $('#umdItems').html('<li class="text-danger small">데이터가 없습니다.</li>');
+		          return;
+		        }
+		        const html = rm.getUmdListBySgg.map(function (emd) {
+		          const safe = String(emd || '').trim();
+		          if (!safe) return '';
+		          return (
+		            '<li><label>' +
+		              '<input type="radio" name="layerTree" value="umd_' + safe + '">' +
+		              safe +
+		            '</label></li>'
+		          );
+		        }).join('');
+		        $('#umdItems').html(html);
+		        $('#umdGroup').attr('open', true)[0]
+		          .scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+		      },
+		      error: function () {
+		        $('#umdItems').html('<li class="text-danger small" style="padding-left:8px;">읍/면/동 목록을 불러오지 못했습니다.</li>');
+		      },
+		      complete: function () {
+		        $('#umdLoading').hide();
+		      }
+		    }); // ← $.ajax 닫기
+		    
+		    $.ajax({
+		        url: 'getSggStats.do',
+		        type: 'GET',
+		        dataType: 'json',
+		        data: { sggNm },
+		        success: function (res) {
+		            const rm = res && res.resultMap ? res.resultMap : {};
+		            if (rm.status !== 'success' || !rm.sgg) {
+		              $('#sggStatsError').removeClass('d-none').text('시군구 통계를 불러오지 못했습니다.');
+		              return;
+		            }
+		            $('#sggStatsError').addClass('d-none').text('');
+		            renderSggStats(rm.sgg);
+		          },
+		        error: function () {
+		          $('#sggStatsError').removeClass('d-none').text('시군구 통계를 불러오지 못했습니다.');
+		        }
+		      });
+		    
+		  } // ← if (v.startsWith('sgg_')) 닫기
+		  
+		  if (v === 'sgg') {
+		    $('#layerSelect').val('sgg').trigger('change');
+		    $('#umdItems').empty();
+		    return;
+		  }
+		  
+		}); // ← change 핸들러 닫기
+	
 	
 	map.on('singleclick', function (evt) {
 	    const coordinate = evt.coordinate;
@@ -395,6 +666,7 @@
 		  },
 		  plugins: [ChartDataLabels] 
 		});
+	  
 </script>
 </body>
 </html>

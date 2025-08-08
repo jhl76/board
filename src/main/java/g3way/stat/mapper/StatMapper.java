@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import g3way.stat.vo.GunguVo;
+import g3way.stat.vo.SggVo;
 import g3way.stat.vo.SidoVo;
 import g3way.stat.vo.UmdVo;
 
@@ -20,4 +21,9 @@ public interface StatMapper {
 	
 	public List<GunguVo> gunguList() throws Exception;
 	
+	public List<SggVo> sggList() throws Exception;
+	
+	public List<String> getUmdListBySgg(@Param("sggNm") String sggNm) throws Exception;
+	
+	public SggVo getSggStats(@Param("sggNm") String sggNm) throws Exception;
 }

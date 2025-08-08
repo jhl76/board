@@ -9,6 +9,7 @@ import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import g3way.stat.mapper.StatMapper;
 import g3way.stat.service.StatService;
 import g3way.stat.vo.GunguVo;
+import g3way.stat.vo.SggVo;
 import g3way.stat.vo.SidoVo;
 import g3way.stat.vo.UmdVo;
 
@@ -32,4 +33,20 @@ public class StatServiceImpl extends EgovAbstractServiceImpl implements StatServ
 	public List<GunguVo> gunguList() throws Exception {
 		return statMapper.gunguList();
 	}
+	
+	@Override
+	public List<SggVo> sggList() throws Exception {
+		return statMapper.sggList();
+	}
+	
+	@Override
+	public List<String> getUmdListBySgg(String sggNm) throws Exception {
+		return statMapper.getUmdListBySgg(sggNm);
+	}
+	
+	@Override
+	public SggVo getSggStats(String sggNm) throws Exception {
+		return statMapper.getSggStats(sggNm);
+	}
+	
 }

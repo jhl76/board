@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import g3way.board.vo.CmntVo;
 import g3way.stat.service.StatService;
 import g3way.stat.vo.GunguVo;
+import g3way.stat.vo.SggVo;
 import g3way.stat.vo.SidoVo;
 import g3way.stat.vo.UmdVo;
 
@@ -60,9 +62,56 @@ public class StatController {
 	public String gisOlHome(Model model) throws Exception{
 		SidoVo sido = statService.sidoList();
 		List<GunguVo> gungu = statService.gunguList();
+		List<SggVo> sggList = statService.sggList();
 		model.addAttribute("sido", sido);
 		model.addAttribute("gungu", gungu);
+		model.addAttribute("sggList", sggList);
 		return "gisOlHome";
+	}
+	
+	@RequestMapping(value = "/getUmdListBySgg.do", method = RequestMethod.GET)
+	public ModelAndView getUmdListBySgg(@RequestParam("sggNm") String sggNm) throws Exception
+	{
+		System.out.println("sggNm:" + sggNm);
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			List<String> getUmdListBySgg = statService.getUmdListBySgg(sggNm);
+			System.out.println("getUmdListBySgg : " + getUmdListBySgg);
+			if (getUmdListBySgg != null) {
+				resultMap.put("status", "success");
+	            resultMap.put("getUmdListBySgg", getUmdListBySgg);  
+			}else {
+				resultMap.put("status", "error");
+			}
+		} catch (Exception e) {
+			 e.printStackTrace();
+			 resultMap.put("status", "error");
+		}
+		ModelAndView mav = new ModelAndView("jsonView");
+		mav.addObject("resultMap", resultMap);
+		return mav;
+	}
+	
+	@RequestMapping(value = "/getSggStats.do", method = RequestMethod.GET)
+	public ModelAndView getSggStats(@RequestParam("sggNm") String sggNm) throws Exception
+	{
+		System.out.println("sggNm:" + sggNm);
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			SggVo sgg = statService.getSggStats(sggNm);
+			if (sgg != null) {
+				resultMap.put("status", "success");
+	            resultMap.put("sgg", sgg);  
+			}else {
+				resultMap.put("status", "error");
+			}
+		} catch (Exception e) {
+			 e.printStackTrace();
+			 resultMap.put("status", "error");
+		}
+		ModelAndView mav = new ModelAndView("jsonView");
+		mav.addObject("resultMap", resultMap);
+		return mav;
 	}
 	
 	@RequestMapping(value = "/proxy.do", method = RequestMethod.GET)

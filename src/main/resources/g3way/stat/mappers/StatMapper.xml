@@ -56,5 +56,33 @@
 	ORDER BY 
 	    SUM("TOT_NMPR_C") DESC
 </select>
-	
+
+<select id="sggList" resultType="SggVo">
+	SELECT
+	    "SGG_NM" AS sggNm
+	FROM board."INCHEON_SGG_POPP_STAT"
+</select>
+
+<select id="getUmdListBySgg" resultType="String" parameterType="String">
+  SELECT "EMD_KOR_NM"
+  FROM board."INCHEON_UMD_POPP_STAT"
+  WHERE "SGG_NM" =  #{sggNm} 
+  ORDER BY "EMD_KOR_NM"
+</select>
+
+<select id="getSggStats" resultType="SggVo" parameterType="String"> 
+	SELECT
+	    "SGG_NM"      AS sggNm,       
+	    "TOT_NMPR_C"  AS totNmprC,    
+	    "HH_CNT"      AS hhCnt,       
+	    "HH_NMPR"     AS hhNmpr,      
+	    "MALE_NMPR_"  AS maleNmpr,    
+	    "FEML_NMPR_"  AS femlNmpr,    
+	    "MALE_FEML_"  AS maleFeml,    
+	    "LSMT_NMPR_"  AS lsmtNmpr,    
+	    "TOT_NMPR_L"  AS totNmprL
+	FROM board."INCHEON_SGG_POPP_STAT"
+	WHERE "SGG_NM" = #{sggNm}
+</select>
+
 </mapper>
