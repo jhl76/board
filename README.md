@@ -1,5 +1,5 @@
-1. Spring Security & Session Intercepter (java)
-2. Paging
-3. File Upload & Download
-4. Board CRUD + Comment & CommentReply (Ajax)
-5. GIS - GeoServer / PostGIS Practice
+1. 스프링 시큐리티 적용
+2. 페이징 처리
+3. 파일 업로드 및 다운로드 (단일 파일)
+4. 게시판 CRUD + 댓글 기능 (Ajax)
+5. GIS - GeoServer / PostGIS 연동해서 인천광역시 인구통계 실습
