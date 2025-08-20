@@ -2,4 +2,4 @@
 2. 페이징 처리
 3. 파일 업로드 및 다운로드 (단일 파일)
 4. 게시판 CRUD + 댓글 기능 (Ajax)
-5. GIS - GeoServer / PostGIS 연동해서 인천광역시 인구통계 실습
+5. GIS - GeoServer / PostGIS 활용하여 인천광역시 인구통계 실습
